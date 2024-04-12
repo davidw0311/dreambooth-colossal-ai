@@ -29,7 +29,7 @@ from colossalai.nn.optimizer import HybridAdam
 disable_existing_loggers()
 logger = get_dist_logger()
 
-
+print("\n\nimports finished\n\n")
 def import_model_class_from_model_name_or_path(pretrained_model_name_or_path: str):
     text_encoder_config = PretrainedConfig.from_pretrained(
         pretrained_model_name_or_path,
@@ -164,7 +164,7 @@ def parse_args(input_args=None):
         default=None,
         help="Total number of training steps to perform.  If provided, overrides num_train_epochs.",
     )
-    parser.add_argument("--save_steps", type=int, default=500, help="Save checkpoint every X updates steps.")
+    parser.add_argument("--save_steps", type=int, default=2000, help="Save checkpoint every X updates steps.")
     parser.add_argument(
         "--gradient_checkpointing",
         action="store_true",
@@ -605,7 +605,7 @@ def main(args):
     progress_bar = tqdm(range(args.max_train_steps), disable=not local_rank == 0)
     progress_bar.set_description("Steps")
     global_step = 0
-
+    print("before synch")
     torch.cuda.synchronize()
     for epoch in range(args.num_train_epochs):
         unet.train()
@@ -679,7 +679,7 @@ def main(args):
             if global_step % args.save_steps == 0:
                 torch.cuda.synchronize()
                 save_path = os.path.join(args.output_dir, f"checkpoint-{global_step}")
-                booster.save_model(unet, os.path.join(save_path, "diffusion_pytorch_model.bin"))
+                booster.save_model(unet, os.path.join(save_path, "pytorch_model.bin"))
                 if local_rank == 0:
                     if not os.path.exists(os.path.join(save_path, "config.json")):
                         shutil.copy(os.path.join(args.pretrained_model_name_or_path, "unet/config.json"), save_path)
@@ -688,11 +688,11 @@ def main(args):
                 break
     torch.cuda.synchronize()
 
-    booster.save_model(unet, os.path.join(args.output_dir, "diffusion_pytorch_model.bin"))
+    booster.save_model(unet, os.path.join(args.output_dir, "pytorch_model.bin"))
     logger.info(f"Saving model checkpoint to {args.output_dir} on rank {local_rank}")
     if local_rank == 0:
-        if not os.path.exists(os.path.join(args.output_dir, "config.json")):
-            shutil.copy(os.path.join(args.pretrained_model_name_or_path, "unet/config.json"), args.output_dir)
+        # if not os.path.exists(os.path.join(args.output_dir, "config.json")):
+        #     shutil.copy(os.path.join(args.pretrained_model_name_or_path, "unet/config.json"), args.output_dir)
         if args.push_to_hub:
             repo.push_to_hub(commit_message="End of training", blocking=False, auto_lfs_prune=True)
 

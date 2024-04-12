@@ -350,7 +350,7 @@ def main(args):
         gradient_accumulation_steps=args.gradient_accumulation_steps,
         mixed_precision=args.mixed_precision,
         log_with="tensorboard",
-        logging_dir=logging_dir,
+        project_dir=logging_dir,
     )
 
     # Currently, it's not possible to do gradient accumulation when training two models with accelerate.accumulate
@@ -695,11 +695,19 @@ def main(args):
             revision=args.revision,
         )
         pipeline.save_pretrained(args.output_dir)
-
+        
+        # change the naming
+        os.rename(f"{args.output_dir}/unet/diffusion_pytorch_model.bin", f"{args.output_dir}/unet/pytorch_model.bin")
+        os.rename(f"{args.output_dir}/vae/diffusion_pytorch_model.bin", f"{args.output_dir}/vae/pytorch_model.bin")
+        
         if args.push_to_hub:
             repo.push_to_hub(commit_message="End of training", blocking=False, auto_lfs_prune=True)
 
     accelerator.end_training()
+    
+
+    
+    
 
 
 if __name__ == "__main__":
