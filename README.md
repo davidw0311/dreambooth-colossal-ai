@@ -93,3 +93,5 @@ python inference.py \
 ![eiffel-capy](example_images/eiffel_capy.png)
 
 ## Comparisons to original Dreambooth
+![image](https://github.com/davidw0311/dreambooth-colossal-ai/assets/43504578/91540efa-0912-49a3-8cd5-b43e40c816e1)
+
