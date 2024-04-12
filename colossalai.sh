@@ -2,7 +2,6 @@ HF_DATASETS_OFFLINE=1
 TRANSFORMERS_OFFLINE=1
 DIFFUSERS_OFFLINE=1
 
-
 export MODEL_NAME="runwayml/stable-diffusion-v1-5"
 export INSTANCE_DIR="./datasets/capy/instance"
 export OUTPUT_DIR="./weight_output_colossal_ai_capy_noprior"
