@@ -69,3 +69,27 @@ bash colossalai.sh
 This will first download the pretrained weights from huggingface. The finetuned model's unet weights should be saved under $OUTPUT_DIR
 
 ## Performing Inference
+
+Run the inference script
+```
+python inference.py \
+--model_id="runwayml/stable-diffusion-v1-5" \
+--unet_checkpoint="./weight_output_colossal_ai_capy_noprior" \
+--prompt="a photo of a xyzcccapy in snow" \
+--output_dir="inference_images" 
+```
+- change the model_id, checkpoint_path, and prompts as needed
+- the script will save the images under output_dir
+
+## Demo - after dreambooth finetuning
+
+### a photo of a xyzcccapy in snow
+![snow-capy](example_images/snow_capy.png)
+
+### a photo of a xyzcccapy on the moon
+![moon-capy](example_images/moon_capy.png)
+
+### a photo of a xyzcccapy in front of the Eiffel Tower
+![eiffel-capy](example_images/eiffel_capy.png)
+
+## Comparisons to original Dreambooth
