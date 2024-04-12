@@ -23,6 +23,11 @@ conda activate dreambooth-colossal
 
 An example dataset is provided under [datasets/capy/instance](datasets/capy/instance)
 
+<img src="datasets/capy/instance/0001.jpg" width="150" height="150"/>
+<img src="datasets/capy/instance/0002.jpg" width="150" height="150"/>
+<img src="datasets/capy/instance/0003.jpg" width="150" height="150"/>
+<img src="datasets/capy/instance/0004.jpg" width="150" height="150"/>
+
 To create your own custom dataset, upload 3-5 images of a certain subject.
 
 ## Running example using colossal-ai for dreambooth
@@ -84,13 +89,14 @@ python inference.py \
 ## Demo - after dreambooth finetuning
 
 ### a photo of a xyzcccapy in snow
-![snow-capy](example_images/snow_capy.png)
+<img src="example_images/snow_capy.png" width="250" height="250"/>
 
 ### a photo of a xyzcccapy on the moon
-![moon-capy](example_images/moon_capy.png)
+<img src="example_images/moon_capy.png" width="250" height="250"/>
 
 ### a photo of a xyzcccapy in front of the Eiffel Tower
-![eiffel-capy](example_images/eiffel_capy.png)
+<img src="example_images/eiffel_capy.png" width="250" height="250"/>
+
 
 ## Comparisons to original Dreambooth
 
@@ -120,3 +126,60 @@ Using the original dreambooth script, the training takes 2 minutes, 33s, with ma
 
 Colossal AI also offers the ability to train across multiple GPUs, as well as the gemini option to greatly reduce GPU utilization.
 
+
+## Prior Preserving Finetuning
+
+The dreambooth finetuning can also be run with the option to preserve priors. In this case, the process aims to preserve the prior knowledge of the model by balancing the training using a dataset of class images. To test this, use [colossalai_preserve_prior.sh](colossalai_preserve_prior.sh) and run
+
+```
+bash colossalai_preserve_prior.sh
+```
+
+```
+HF_DATASETS_OFFLINE=1
+TRANSFORMERS_OFFLINE=1
+DIFFUSERS_OFFLINE=1
+
+
+export MODEL_NAME="runwayml/stable-diffusion-v1-5"
+export INSTANCE_DIR="./datasets/capy/instance"
+export CLASS_DIR="./datasets/capy/class"
+export OUTPUT_DIR="./weight_output_colossal_ai_capy_with_prior"
+
+torchrun --nproc_per_node 1 --standalone train_dreambooth_colossalai.py \
+  --pretrained_model_name_or_path=$MODEL_NAME  \
+  --instance_data_dir=$INSTANCE_DIR \
+  --class_data_dir=$CLASS_DIR \
+  --output_dir=$OUTPUT_DIR \
+  --with_prior_preservation --prior_loss_weight=0.8 \
+  --instance_prompt="a photo of @$$WaG capybara" \
+  --class_prompt="a photo of capybara" \
+  --resolution=512 \
+  --plugin="torch_ddp_fp16" \
+  --train_batch_size=1 \
+  --learning_rate=5e-6 \
+  --lr_scheduler="constant" \
+  --lr_warmup_steps=0 \
+  --num_class_images=200 \
+  --max_train_steps=800
+```
+
+The script will first use the model to generate num_class_images class images and save this to the $CLASS_DIR folder
+
+- recommended to use 200-300 class images
+- max train steps should be around (# of instance images) * (# of class images)
+
+This method allow the finetuned model to also preserve knowledge of the original class
+
+## Inference with a prior preserved model
+
+Add a instance_prompt containing the special token to the args when running inference.py
+
+```
+python inference.py \
+--model_id="runwayml/stable-diffusion-v1-5" \
+--unet_checkpoint="./weight_output_colossal_ai_capy_with_prior" \
+--prompt="a photo of capybara in snow" \
+--instance_prompt="a photo of @$$WaG capybara in snow" \
+--output_dir="inference_images" 
+```

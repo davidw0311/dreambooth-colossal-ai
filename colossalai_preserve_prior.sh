@@ -13,11 +13,11 @@ torchrun --nproc_per_node 1 --standalone train_dreambooth_colossalai.py \
   --instance_data_dir=$INSTANCE_DIR \
   --class_data_dir=$CLASS_DIR \
   --output_dir=$OUTPUT_DIR \
-  --with_prior_preservation --prior_loss_weight=1.0 \
-  --instance_prompt="a photo of sks capybara" \
+  --with_prior_preservation --prior_loss_weight=0.8 \
+  --instance_prompt="a photo of @$$WaG capybara" \
   --class_prompt="a photo of capybara" \
   --resolution=512 \
-  --plugin="low_level_zero" \
+  --plugin="torch_ddp_fp16" \
   --train_batch_size=1 \
   --learning_rate=5e-6 \
   --lr_scheduler="constant" \
