@@ -1,4 +1,5 @@
 datasets
+!datasets/capy/instance
 *.bin
 weight_output*
 inference_images
