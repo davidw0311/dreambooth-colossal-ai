@@ -93,5 +93,30 @@ python inference.py \
 ![eiffel-capy](example_images/eiffel_capy.png)
 
 ## Comparisons to original Dreambooth
+
+To run the original dreambooht finetuning without Colossal-AI, run
+```
+bash dreambooth.sh
+```
+
+On a single Nvidia A100 40GB gpu, 400 iterations using Colossal AI takes
+
+2 minutes, 1 s using "torch_ddp" plugin, with max GPU utilization of 20.1 GB
+
+![image](https://github.com/davidw0311/dreambooth-colossal-ai/assets/43504578/14848250-3c4d-4dd0-8b26-dc05c8a2cb04)
+
+1 minute, 34s using the "torch_ddp_fp16" plugin, with max GPU utilization of 20.1 GB 
+
+![image](https://github.com/davidw0311/dreambooth-colossal-ai/assets/43504578/927cbd70-3fec-466f-a605-278e9e5b8c7d)
+
+2 minutes, 28s using the "low_level_zero" plugin, with max GPU utilization of 17.6 GB
+
 ![image](https://github.com/davidw0311/dreambooth-colossal-ai/assets/43504578/91540efa-0912-49a3-8cd5-b43e40c816e1)
+
+
+Using the original dreambooth script, the training takes 2 minutes, 33s, with max GPU utilization of 17.3 GB
+
+![image](https://github.com/davidw0311/dreambooth-colossal-ai/assets/43504578/cb50dc68-3ac2-4e98-8143-0ee8e25d3fd4)
+
+Colossal AI also offers the ability to train across multiple GPUs, as well as the gemini option to greatly reduce GPU utilization.
 
