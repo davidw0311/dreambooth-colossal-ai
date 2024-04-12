@@ -23,10 +23,13 @@ conda activate dreambooth-colossal
 
 An example dataset is provided under [datasets/capy/instance](datasets/capy/instance)
 
-<img src="datasets/capy/instance/0001.jpg" width="150" height="150"/>
-<img src="datasets/capy/instance/0002.jpg" width="150" height="150"/>
-<img src="datasets/capy/instance/0003.jpg" width="150" height="150"/>
-<img src="datasets/capy/instance/0004.jpg" width="150" height="150"/>
+<p float="left">
+  <img src="datasets/capy/instance/0001.jpg" width="150" height="150"/>
+    <img src="datasets/capy/instance/0002.jpg" width="150" height="150"/>
+    <img src="datasets/capy/instance/0003.jpg" width="150" height="150"/>
+    <img src="datasets/capy/instance/0004.jpg" width="150" height="150"/>
+</p>
+
 
 To create your own custom dataset, upload 3-5 images of a certain subject.
 
