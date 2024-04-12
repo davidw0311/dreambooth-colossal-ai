@@ -2,6 +2,7 @@ HF_DATASETS_OFFLINE=1
 TRANSFORMERS_OFFLINE=1
 DIFFUSERS_OFFLINE=1
 
+
 export MODEL_NAME="runwayml/stable-diffusion-v1-5"
 export INSTANCE_DIR="./datasets/capy/instance"
 export OUTPUT_DIR="./weight_output_colossal_ai_capy_noprior"
@@ -12,7 +13,7 @@ torchrun --nproc_per_node 1 --standalone train_dreambooth_colossalai.py \
   --output_dir=$OUTPUT_DIR \
   --instance_prompt="a photo of xyzcccapy" \
   --resolution=512 \
-  --plugin="low_level_zero" \
+  --plugin="torch_ddp_fp16" \
   --train_batch_size=1 \
   --learning_rate=5e-6 \
   --lr_scheduler="constant" \

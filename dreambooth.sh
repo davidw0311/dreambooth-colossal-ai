@@ -1,8 +1,8 @@
 python train_dreambooth.py \
    --pretrained_model_name_or_path="runwayml/stable-diffusion-v1-5"  \
-  --instance_data_dir="./datasets/dog" \
-  --output_dir="./weight_output_dreambooth" \
-  --instance_prompt="a picture of a sks dog" \
+  --instance_data_dir="./datasets/capy/instance" \
+  --output_dir="./weight_output_dreambooth_capy" \
+  --instance_prompt="a picture of a xyzcccapy" \
   --resolution=512 \
   --train_batch_size=1 \
   --learning_rate=5e-6 \
